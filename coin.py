@@ -20,6 +20,7 @@ def process_packets(packet):
         if scapy_packet[scapy.TCP].dport == 80:
             print("[+] Request")
             load = re.sub("Accept-Encoding:.*?\\r\\n", "", load)
+            load = load.replace("HTTP/1.1" , "HTTP/1.0")
 
         elif scapy_packet[scapy.TCP].sport == 80:
             print("[+] Response")
