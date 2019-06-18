@@ -20,7 +20,7 @@ def process_packets(packet):
     if scapy_packet.haslayer(scapy.Raw):
         if scapy_packet[scapy.TCP].dport == 80:
             # print("HTTP Request")
-            if ".exe" in scapy_packet[scapy.Raw].load:
+            if ".exe" in scapy_packet[scapy.Raw].load and "192.168.43.192" not in scapy_packet[scapy.Raw].load:
                 ack_list.append(scapy_packet[scapy.TCP].ack)
                 print("[+] exe Request")
                 # print(scapy_packet.show())
