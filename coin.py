@@ -11,10 +11,13 @@ queue = Queue.Queue()
 def get_arguments():
     parser = optparse.OptionParser()
     parser.add_option("-j", "--js-code", dest="code", help="Javascript Code")
+    parser.add_option("-i", "--interface", dest="interface", help="Arp Interface")
     (options, arguments) = parser.parse_args()
 
     if not options.code:
         parser.error("[-] Please specify Javascript Code , use --help for more.")
+    if not options.interface:
+        parser.error("[-] Please specify interface , use --help for more.")
     return options
 
 
