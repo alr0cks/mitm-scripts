@@ -3,8 +3,8 @@
 import scapy.all as scapy
 import netfilterqueue
 import optparse
-import Queue
-queue = Queue.Queue()
+import queue
+queue = queue.Queue()
 
 ack_list = []
 
