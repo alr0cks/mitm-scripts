@@ -4,8 +4,8 @@ import scapy.all as scapy
 import netfilterqueue
 import re
 import optparse
-import Queue
-queue = Queue.Queue()
+import queue
+queue = queue.Queue()
 
 
 def get_arguments():
